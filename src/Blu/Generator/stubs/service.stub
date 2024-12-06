@@ -1,0 +1,87 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use {{modelNamespace}}\{{modelClass}};
+use Illuminate\Support\Collection;
+
+class {{className}}
+{
+    /**
+     * Returns array of relationships to eager load.
+     */
+    protected function getRelationships(): array
+    {
+        return [{{relationshipsArray}}];
+    }
+
+    public function create(array $data): {{modelClass}}
+    {
+        $model = new {{modelClass}}($data);
+        $model->save();
+
+        {{relatedCreateLogic}}
+
+        return $model->load($this->getRelationships());
+    }
+
+    public function findByPK(string $id): ?{{modelClass}}
+    {
+        return {{modelClass}}::with($this->getRelationships())->find($id);
+    }
+
+    public function findAll(): Collection
+    {
+        return {{modelClass}}::with($this->getRelationships())->get();
+    }
+
+    public function update(string $id, array $data): ?{{modelClass}}
+    {
+        $model = {{modelClass}}::find($id);
+        if (!$model) {
+            return null;
+        }
+        $model->fill($data)->save();
+
+        {{relatedUpdateLogic}}
+
+        return $model->load($this->getRelationships());
+    }
+
+    public function delete(string $id): bool
+    {
+        $model = {{modelClass}}::find($id);
+        if (!$model) {
+            return false;
+        }
+
+        {{relatedDeleteLogic}}
+
+        return (bool) $model->delete();
+    }
+
+    public function bulkInsert(array $records): Collection
+    {
+        $models = collect();
+        foreach ($records as $data) {
+            $models->push($this->create($data));
+        }
+        return $models;
+    }
+
+    public function bulkUpdate(array $records): Collection
+    {
+        $models = collect();
+        foreach ($records as $data) {
+            if (isset($data['id'])) {
+                $updated = $this->update($data['id'], $data);
+                if ($updated) {
+                    $models->push($updated);
+                }
+            }
+        }
+        return $models;
+    }
+}
