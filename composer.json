@@ -1,5 +1,5 @@
 {
-    "name": "blu/eloquent-generator",
+    "name": "blu/eloquent-crud-generator",
     "description": "A code generation module for Eloquent models and related services",
     "type": "library",
     "license": "MIT",
