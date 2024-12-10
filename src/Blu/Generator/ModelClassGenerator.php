@@ -78,7 +78,7 @@ class ModelClassGenerator
 
     public function {$methodName}()
     {
-        return \$this->belongsTo({$namespace}\\{$targetClass}::class, '{$rel['foreign_key']}', '{$rel['owner_key']}');
+        return \$this->belongsTo({$targetClass}::class, '{$rel['foreign_key']}', '{$rel['owner_key']}');
     }
 
 PHP;
@@ -93,7 +93,7 @@ PHP;
 
     public function {$methodName}()
     {
-        return \$this->hasMany({$namespace}\\{$targetClass}::class, '{$rel['foreign_key']}', '{$rel['local_key']}');
+        return \$this->hasMany({$targetClass}::class, '{$rel['foreign_key']}', '{$rel['local_key']}');
     }
 
 PHP;
